@@ -1,0 +1,99 @@
+-------------------------------------------------------------------------------
+my pretty log format setting:
+-------------------------------------------------------------------------------
+git config --global alias.logg "log --graph --decorate \
+--all -20 --date=format:'%Y%m%d_%H%M%S' \
+--pretty=format:'%C(cyan)%h%Creset [%<(12,trunc)%aN|%C(blue)%ad%Creset|%C(yellow)%cd%Creset] %C(auto)%d %<(60,trunc)\"%s\"'"
+
+Explanation:
+
+--graph
+    Draw pretty graph for branches
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    This parameter greatly slows git logg.
+    USE IN CONJUNCTION WITH git commit-graph --reachable
+    to regain lost performance. Works amazingly well,
+
+    Tested with:
+        single branch 100,000 commits.
+        WSL2 & default bash
+
+        git log would print (anything) in ~0.2s
+        git log with graph would print (anything) in xXx s
+        git log with graph & commit-graph would print (anything) in xXx s
+            side-node: this increased .git size from xXx KB to xXx KB
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+--decorate
+    Just tags commits that are currently checked out with (master)
+        and stuff like that. Also tags where origin is for example (origin)
+
+--all
+    - Important option especially if you've ever messed around with
+    "git filter-branch --env-filter"
+        which can mess up your history that is normally hidden by "git log"
+    ( like here: https://stackoverflow.com/questions/454734/how-can-one-change-the-timestamp-of-an-old-commit-in-git )
+
+-<number>
+-n <number>
+--max-count=<number>
+    Limit the number of commits to output.
+    This is misleading however, it doesn't speedup git log at all 
+        (as you'd expect)
+    Tested it with ~1100 commit long git:
+
+--date-format
+    - self explanatory
+
+--pretty=format
+
+    <(60,trunc) - Truncate a certain string
+        (like %<(12,trunc)%aN, truncate to 12)
+
+    %C(<color>)
+    %h - hash
+    %An - Author name
+    %ad - author date
+    %cd - commit date
+    %s  - commit message
+    %d  - decorate
+
+
+-------------------------------------------------------------------------------
+Secondary pretty log format setting:
+-------------------------------------------------------------------------------
+git config --global alias.logg2 "log --graph --decorate \
+--all --date=format:'%Y%m%d_%H%M%S' \
+--pretty=format:'%C(cyan)%h%Creset [%<(12,trunc)%aN|%C(magenta)%ad%Creset|%C(green)%cd%Creset] %C(auto)%d %<(60,trunc)\"%s\"'"
+
+
+
+
+-------------------------------------------------------------------------------
+Improve git log performance:
+-------------------------------------------------------------------------------
+git commit-graph write --reachable
+    ( from https://stackoverflow.com/questions/35186829/how-to-improve-git-log-performance )
+
+
+
+
+-------------------------------------------------------------------------------
+Deprecated / unused options:
+-------------------------------------------------------------------------------
+--topo-order
+    - This order is too into the detailed weeds.
+    For example:
+    ---1----2-
+        \     \
+         3-------5---
+Who cares if you list 2 before 3 or reversed. git log will ALWAYS put 1 last
+    and 5 at the head of the list. No matter commit-date / author-date
+
+    ( https://git-scm.com/docs/git-log#_commit_ordering )
+    ( https://stackoverflow.com/questions/60671345/git-log-default-order-criteria )
+
+
+--committer-date-is-author-date
+    Does not work with git rebase -i :((((
+    https://git-scm.com/docs/git-rebase/2.17.0#Documentation/git-rebase.txt---committer-date-is-author-date
