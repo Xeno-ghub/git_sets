@@ -15,13 +15,35 @@ Explanation:
     to regain lost performance. Works amazingly well,
 
     Tested with:
-        single branch 100,000 commits.
         WSL2 & default bash
 
+        single branch ~1,100 commits.
+
         git log would print (anything) in ~0.2s
-        git log with graph would print (anything) in xXx s
-        git log with graph & commit-graph would print (anything) in xXx s
-            side-node: this increased .git size from xXx KB to xXx KB
+        git log with graph outputs in 4s first run & 1.6s subsequent
+        git log with graph & commit-graph would print (anything) in ~0.2s
+            side-node: this ~increased~, wait, it DECREASED ITS
+             .git size from 3200 KB to 400 KB
+
+        single branch 10,000 commits.
+
+        git log would print (anything) in ~0.2s
+        git log with graph outputs in 11.5s first run & 3.2s subsequent
+        git log with graph & commit-graph would print (anything) in ~0.2s
+            side-node: this increased .git size from 16000KB to 16000KB
+            So basically it did nothing to the size
+
+        single branch 100,000 commits.
+
+        git log would print (anything) in ~0.36s
+        git log with graph would print (anything) in 18.3s
+        git log with graph & commit-graph would print (anything) in 0.661s
+            side-node: increased .git size from 174,000KB (!!) to 175,000 KB
+            so basically nothing remarkable. Very size-efficient?
+
+        P.S. All these huge commit histories were linear. Really the graph was
+            just a line. So maybe results would be much different with 
+            complicated graphs
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 --decorate
@@ -40,7 +62,6 @@ Explanation:
     Limit the number of commits to output.
     This is misleading however, it doesn't speedup git log at all 
         (as you'd expect)
-    Tested it with ~1100 commit long git:
 
 --date-format
     - self explanatory
