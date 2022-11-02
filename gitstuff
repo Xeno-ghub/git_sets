@@ -98,6 +98,20 @@ git commit-graph write --reachable
 
 
 
+-------------------------------------------------------------------------------
+git author:
+-------------------------------------------------------------------------------
+
+print:
+git config --global user.name
+git config --global user.email
+
+set:
+git config --global user.name "John Doe"
+git config --global user.email "john@doe.org"
+
+
+
 
 -------------------------------------------------------------------------------
 Deprecated / unused options:
