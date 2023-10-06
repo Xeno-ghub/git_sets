@@ -97,6 +97,13 @@ git commit-graph write --reachable
     ( from https://stackoverflow.com/questions/35186829/how-to-improve-git-log-performance )
 
 
+-------------------------------------------------------------------------------
+Remove git garbage / prune:
+-------------------------------------------------------------------------------
+
+from [1]:
+git -c gc.reflogExpire=0 -c gc.reflogExpireUnreachable=0 -c gc.rerereresolved=0 \
+    -c gc.rerereunresolved=0 -c gc.pruneExpire=now gc
 
 -------------------------------------------------------------------------------
 git author:
@@ -132,3 +139,7 @@ Who cares if you list 2 before 3 or reversed. git log will ALWAYS put 1 last
 --committer-date-is-author-date
     Does not work with git rebase -i :((((
     https://git-scm.com/docs/git-rebase/2.17.0#Documentation/git-rebase.txt---committer-date-is-author-date
+
+Refs:
+
+1. https://stackoverflow.com/questions/1904860/how-to-remove-unreferenced-blobs-from-my-git-repository
